@@ -2,7 +2,7 @@ import Topbar from "@/components/Topbar";
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="rounded-md overflow-hidden">
       <Topbar />
     </div>
   );
