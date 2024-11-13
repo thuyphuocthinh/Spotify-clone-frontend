@@ -8,9 +8,15 @@ interface MusicStore {
     isLoading: boolean;
     error: null | string;
     currentAlbum: null | Album;
+    madeForYouSongs: Song[];
+    trendingSongs: Song[];
+    featuredSongs: Song[];
 
-    fetchAlbums: () => Promise<void>,
-    fetchAlbumById: (albumId: string) => Promise<void>
+    fetchAlbums: () => Promise<void>;
+    fetchAlbumById: (albumId: string) => Promise<void>;
+    fetchFeaturedSongs: () => Promise<void>;
+    fetchMadeForYouSongs: () => Promise<void>;
+    fetchTrendingSongs: () => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -19,6 +25,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
     currentAlbum: null,
     isLoading: false,
     error: null,
+    madeForYouSongs: [],
+    trendingSongs: [],
+    featuredSongs: [],
 
     fetchAlbums: async () => {
         set({isLoading: true})
@@ -43,4 +52,40 @@ export const useMusicStore = create<MusicStore>((set) => ({
             set({isLoading: false})
         }
     },
+
+    fetchFeaturedSongs: async() => {
+        set({isLoading: true});
+        try {
+            const response = await axiosInstance.get("/songs/featured");
+            set({featuredSongs: response.data.data})
+        } catch (error: any) {
+            set({error: error.response.data.message})
+        } finally {
+            set({isLoading: false, error: null})
+        }
+    },
+
+    fetchMadeForYouSongs: async () => {
+        set({isLoading: true});
+        try {
+            const response = await axiosInstance.get("/songs/made-for-you");
+            set({madeForYouSongs: response.data.data})
+        } catch (error: any) {
+            set({error: error.response.data.message})
+        } finally {
+            set({isLoading: false, error: null})
+        }
+    },
+
+    fetchTrendingSongs: async () => {
+        set({isLoading: true});
+        try {
+            const response = await axiosInstance.get("/songs/trending");
+            set({trendingSongs: response.data.data})
+        } catch (error: any) {
+            set({error: error.response.data.message})
+        } finally {
+            set({isLoading: false, error: null})
+        }
+    }
 }))
