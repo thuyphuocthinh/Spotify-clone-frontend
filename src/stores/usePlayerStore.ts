@@ -43,15 +43,16 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     playNext: () => {
         const {currentIndex, queue} = get();
         let nextIndex = currentIndex + 1;
-         if(nextIndex === queue.length) {
+        if(nextIndex === queue.length) {
             nextIndex = 0;
-         }
-         const nextSong = queue[nextIndex];
-         set({
+        }
+        const nextSong = queue[nextIndex];
+        set({
             currentSong: nextSong,
             isPlaying: true,
             currentIndex: nextIndex
-         })
+        })
+        console.log(`>>> currentIndex: ${currentIndex}`)
     },
     playPrevious: ()=> {
         const {currentIndex, queue} = get();

@@ -17,8 +17,15 @@ export default function AlbumPage() {
   const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore();
   const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
-  const handlePlayAlbum = (index: number) => {
-    if (currentAlbum) {
+  const handlePlayAlbum = () => {
+    if (!currentAlbum) return;
+
+    const isCurrentAlbumPlaying = currentAlbum?.songs.some(
+      (song) => song._id === currentSong?._id
+    );
+    if (isCurrentAlbumPlaying) togglePlay();
+    else {
+      // start playing the album from the beginning
       playAlbum(currentAlbum?.songs, 0);
     }
   };
@@ -77,7 +84,7 @@ export default function AlbumPage() {
             </div>
 
             {/* play button */}
-            {/* <div className="px-6 pb-4 flex items-center gap-6">
+            <div className="px-6 pb-4 flex items-center gap-6">
               <Button
                 onClick={handlePlayAlbum}
                 size="icon"
@@ -93,7 +100,7 @@ export default function AlbumPage() {
                   <Play className="h-7 w-7 text-black" />
                 )}
               </Button>
-            </div> */}
+            </div>
 
             {/* Table Section */}
             <div className="bg-black/20 backdrop-blur-sm">
